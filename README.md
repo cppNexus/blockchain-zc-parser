@@ -376,7 +376,6 @@ Pull requests are welcome. Please:
 
 ## License
 
-Licensed under either of:
+This project is licensed under the Apache License 2.0 — see the [LICENSE](./LICENSE) file for details.
 
-- **Apache-2.0** ([LICENSE-APACHE](LICENSE-APACHE))
 ---
