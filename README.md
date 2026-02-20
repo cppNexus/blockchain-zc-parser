@@ -286,7 +286,7 @@ With `default-features = false`:
 
 ## Minimum supported Rust version (MSRV)
 
-**Rust 1.83+** (edition 2021). The crate uses only stable Rust features.
+**Rust 1.88+** (edition 2021). The crate uses only stable Rust features.
 
 ---
 
