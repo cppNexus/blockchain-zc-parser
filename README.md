@@ -3,12 +3,11 @@
 [![Crates.io](https://img.shields.io/crates/v/blockchain-zc-parser.svg)](https://crates.io/crates/blockchain-zc-parser)
 [![Docs.rs](https://docs.rs/blockchain-zc-parser/badge.svg)](https://docs.rs/blockchain-zc-parser)
 [![CI](https://github.com/cppNexus/blockchain-zc-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/cppNexus/blockchain-zc-parser/actions/workflows/ci.yml)
-[![Apache-2.0](https://img.shields.io/badge/license-20Apache--2.0-blue.svg)](#license)
+[![Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](#license)
 
-A **zero-copy**, allocation-free parser for Bitcoin blockchain binary data written in Rust.
+A **zero-copy**, allocation-free parser for Bitcoin blockchain binary data written in Rust, designed for high-throughput indexers, analytics engines, and embedded environments.
 
 ---
-https://github.com/cppNexus/blockchain-zc-parser.git
 ## Features
 
 | | |
@@ -199,7 +198,7 @@ fn scan_block(raw_block: &[u8]) -> blockchain_zc_parser::ParseResult<u64> {
     while iter.next_tx(
         |_input| Ok(()),              // called for every TxInput
         |output| {                    // called for every TxOutput
-            total_satoshis += output.value as u64;
+            total_satoshis += output.value;
             if let ScriptType::P2WPKH { pubkey_hash } = output.script_pubkey.script_type() {
                 // pubkey_hash: &[u8; 20] — zero-copy pointer into raw_block
                 println!("  P2WPKH output to {:?}", pubkey_hash);
@@ -251,7 +250,7 @@ this file.
 
 ## Benchmarks
 
-Run on an Apple M2 Pro (single-core, Rust 1.88, `--release`):
+Run on an Apple M2 Pro (single-core, Rust stable 1.88 at time of measurement, `--release`):
 
 | Benchmark | Throughput |
 |---|---|
@@ -312,7 +311,7 @@ Pull requests are welcome. Please:
 
 ```
    cargo test
-   cargo clippy --all-targets -- -D warnings
+   cargo clippy --all-targets --all-features -- -D warnings
 ```
 2. Add a unit test for any new parsing logic.
 3. Keep `unsafe` blocks minimal and documented.
@@ -324,7 +323,4 @@ Pull requests are welcome. Please:
 Licensed under either of:
 
 - **Apache-2.0** ([LICENSE-APACHE](LICENSE-APACHE))
-
-at your option.
-
 ---

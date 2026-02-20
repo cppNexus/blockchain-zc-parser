@@ -3,7 +3,7 @@ use blockchain_zc_parser::{
     cursor::Cursor,
     transaction::TransactionParser,
 };
-use criterion::{BenchmarkId, Criterion, Throughput, criterion_group, criterion_main};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
 use std::hint::black_box;
 
 // ---------------------------------------------------------------------------
@@ -21,7 +21,7 @@ fn build_coinbase_tx() -> Vec<u8> {
     tx.extend_from_slice(&0xffff_ffffu32.to_le_bytes()); // sequence
     tx.push(1); // 1 output
     tx.extend_from_slice(&(625_000_000u64).to_le_bytes()); // 6.25 BTC
-    // P2WPKH scriptPubKey (22 bytes)
+                                                           // P2WPKH scriptPubKey (22 bytes)
     tx.push(22);
     tx.extend_from_slice(&[
         0x00, 0x14, 0x89, 0xab, 0xcd, 0xef, 0xab, 0xba, 0xab, 0xba, 0xab, 0xba, 0xab, 0xba, 0xab,
@@ -35,7 +35,7 @@ fn build_p2pkh_tx() -> Vec<u8> {
     let mut tx = Vec::with_capacity(200);
     tx.extend_from_slice(&2i32.to_le_bytes()); // version 2
     tx.push(1); // 1 input
-    // outpoint: arbitrary txid + vout
+                // outpoint: arbitrary txid + vout
     tx.extend_from_slice(&[0xab; 32]);
     tx.extend_from_slice(&0u32.to_le_bytes());
     // scriptSig: compressed pubkey push + sig push (roughly)
