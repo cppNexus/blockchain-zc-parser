@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 rust-version = "1.88"
 description = "Zero-copy, allocation-free parser for Bitcoin/blockchain binary data"
-license = "MIT OR Apache-2.0"
+license = "Apache-2.0"
 repository = "https://github.com/cppNexus/blockchain-zc-parser"
 homepage = "https://github.com/cppNexus/blockchain-zc-parser"
 documentation = "https://docs.rs/blockchain-zc-parser"
@@ -19,12 +19,11 @@ include = [
   "Cargo.toml",
   "README.md",
   "LICENSE-APACHE",
-  "LICENSE-MIT",
 ]
 
 [dependencies]
 sha2 = { version = "0.10", default-features = false }
-thiserror = "2"
+thiserror = { version = "2", default-features = false }
 
 [dev-dependencies]
 criterion = { version = "0.8.2", features = ["html_reports"] }
@@ -36,11 +35,8 @@ harness = false
 
 [features]
 default = ["std"]
-# Enable std-based Display impls
 std = []
-# Enable serde serialization (requires allocation)
-serde = ["dep:serde"]
-
+serde = ["std", "dep:serde"]
 
 [dependencies.serde]
 version = "1"
