@@ -1,13 +1,17 @@
 # blockchain-zc-parser
 
-[![Crates.io](https://img.shields.io/crates/v/blockchain-zc-parser.svg)](https://crates.io/crates/blockchain-zc-parser)
-[![Docs.rs](https://docs.rs/blockchain-zc-parser/badge.svg)](https://docs.rs/blockchain-zc-parser)
+[![Crates.io](https://img.shields.io/crates/v/blockchain-zc-parser)](https://crates.io/crates/blockchain-zc-parser)
+[![Docs.rs](https://img.shields.io/docsrs/blockchain-zc-parser)](https://docs.rs/blockchain-zc-parser)
 [![CI](https://github.com/cppNexus/blockchain-zc-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/cppNexus/blockchain-zc-parser/actions/workflows/ci.yml)
-[![Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](#license)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](#license)
 
 A **zero-copy**, allocation-free parser for Bitcoin blockchain binary data written in Rust, designed for high-throughput indexers, analytics engines, and embedded environments.
 
+A low-level Bitcoin binary parser focused on performance, memory locality,
+and predictable streaming behavior.
+
 ---
+
 ## Features
 
 | | |
@@ -17,6 +21,15 @@ A **zero-copy**, allocation-free parser for Bitcoin blockchain binary data writt
 | **Streaming** | `BlockTxIter` and `TransactionParser` process transactions lazily via closures — never load an entire block into structured memory. |
 | **Fast** | Parsing an 80-byte block header requires only ~10 integer reads from a contiguous buffer. Block file iteration is a tight loop over magic bytes and size fields. |
 | **Safe** | `unsafe` is used only inside `cursor.rs` for pointer arithmetic **after** explicit bounds checks. Every `unsafe` block is annotated. |
+
+## Comparison
+
+| Feature | blockchain-zc-parser | rust-bitcoin |
+|----------|----------------------|--------------|
+| Zero-copy | ✅ | Partial |
+| Alloc-free parsing | ✅ | ❌ |
+| Streaming block iteration | ✅ | ❌ |
+| Full protocol model | ❌ | ✅ |
 
 ## Supported formats
 
@@ -149,6 +162,39 @@ while let Some(raw_block) = it.next_block()? {
 
 ---
 
+## Why this crate exists
+
+Most blockchain parsers:
+
+- Allocate `Vec`s for every transaction
+- Copy script bytes into owned buffers
+- Build large in-memory representations
+- Optimize for convenience over throughput
+
+`blockchain-zc-parser` takes the opposite approach:
+
+- Every structure borrows directly from `&[u8]`
+- No heap allocation in parsing paths
+- Streaming transaction iteration
+- Minimal and auditable `unsafe`
+- Designed for memory-mapped `blkNNNNN.dat` processing
+
+If you care about **throughput, memory locality, and predictable performance**, this crate is built for you.
+
+---
+
+## When not to use this crate
+
+If you need:
+- Full Bitcoin protocol validation
+- Address encoding/decoding
+- PSBT, descriptors, miniscript
+- Wallet functionality
+
+Use `rust-bitcoin` instead.
+
+---
+
 ### Important
 
 If you pass a `blkNNNNN.dat` file directly to `BlockTxIter::new`, parsing will fail
@@ -245,6 +291,16 @@ The [`Cursor`](src/cursor.rs) type is the single entry point for all parsing.
 It advances a `usize` offset into a `&'a [u8]` and returns sub-slices with
 lifetime `'a` — identical to the original input.  No unsafe code exists outside
 this file.
+
+---
+
+## Core design principles
+
+1. **Zero-copy first** — data is never duplicated.
+2. **Streaming over materialization** — process blocks incrementally.
+3. **no_std compatible** — works outside of full OS environments.
+4. **Explicit safety** — all `unsafe` is documented and bounded.
+5. **Performance transparency** — benchmarked and reproducible.
 
 ---
 
