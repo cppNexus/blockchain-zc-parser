@@ -132,7 +132,7 @@ fn block_tx_iter_coinbase_only() {
     assert!(found);
     assert_eq!(input_count, 1);
     assert_eq!(output_count, 1);
-    assert!(iter.next_tx(|_| Ok(()), |_| Ok(())).unwrap() == false);
+    assert!(!iter.next_tx(|_| Ok(()), |_| Ok(())).unwrap());
 }
 
 #[test]
@@ -243,7 +243,7 @@ fn tx_parser_collects_values() {
         .parse_with(
             |_| Ok(()),
             |out| {
-                total_out += out.value as u64;
+                total_out += out.value;
                 Ok(())
             },
         )

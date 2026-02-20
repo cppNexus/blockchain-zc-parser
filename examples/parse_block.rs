@@ -20,7 +20,7 @@ use blockchain_zc_parser::{
 
 const USAGE: &str = "Usage:\n  cargo run --example parse_block\n  cargo run --example parse_block -- <path>\n\nFlags:\n  --summary           Only print header + stats + total output value\n  --limit-tx N        Print only first N transactions (default: all)\n  --tx IDX            Print only a specific transaction by index\n  --no-outputs        Don't print per-output lines\n  --no-opreturn       Suppress OP_RETURN outputs (still counted in totals)\n  -h, --help          Show this help\n\nExamples:\n  cargo run --example parse_block -- --summary genesis.bin\n  cargo run --example parse_block -- --limit-tx 3 tip.bin\n";
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Default)]
 struct Opts {
     summary: bool,
     limit_tx: Option<usize>,
@@ -28,19 +28,6 @@ struct Opts {
     no_outputs: bool,
     no_opreturn: bool,
     help: bool,
-}
-
-impl Default for Opts {
-    fn default() -> Self {
-        Self {
-            summary: false,
-            limit_tx: None,
-            only_tx: None,
-            no_outputs: false,
-            no_opreturn: false,
-            help: false,
-        }
-    }
 }
 
 fn parse_opts(args: &[String]) -> Result<(Opts, Option<String>), String> {
@@ -168,10 +155,10 @@ fn main() -> ParseResult<()> {
                 if input.is_coinbase() {
                     coinbase_txs += 1;
                     if should_print_tx(tx_idx) {
-                        println!("  [tx {}] coinbase", tx_idx);
+                        println!("  [tx {tx_idx}] coinbase");
                     }
                 } else if should_print_tx(tx_idx) {
-                    println!("  [tx {}] normal", tx_idx);
+                    println!("  [tx {tx_idx}] normal");
                 }
             }
             Ok(())
@@ -195,9 +182,8 @@ fn main() -> ParseResult<()> {
                 ScriptType::Multisig { required, total } => {
                     if should_print_outputs_for_tx(tx_idx) {
                         println!(
-                            "    output {} sat  script-type={} ({}-of-{})  script-len={}",
+                            "    output {} sat  script-type=MULTISIG ({}-of-{})  script-len={}",
                             output.value,
-                            "MULTISIG",
                             required,
                             total,
                             output.script_pubkey.len()
@@ -229,15 +215,15 @@ fn main() -> ParseResult<()> {
         saw_first_input_in_tx = false;
     }
 
-    if let Some(only) = opts.only_tx {
-        if only >= tx_idx {
-            eprintln!("requested --tx {only}, but block has only {tx_idx} transactions");
-        }
+    if let Some(only) = opts.only_tx
+        && only >= tx_idx
+    {
+        eprintln!("requested --tx {only}, but block has only {tx_idx} transactions");
     }
 
     println!("\n--- Parse Stats ---");
     println!("Declared tx count : {}", iter.total());
-    println!("Parsed tx count   : {}", tx_idx);
+    println!("Parsed tx count   : {tx_idx}");
     println!("Block size (bytes): {}", block_bytes.len());
 
     println!(
@@ -263,8 +249,8 @@ fn main() -> ParseResult<()> {
     }
 
     if opts.summary {
-        println!("Coinbase txs      : {}", coinbase_txs);
-        println!("Total txs parsed  : {}", tx_idx);
+        println!("Coinbase txs      : {coinbase_txs}");
+        println!("Total txs parsed  : {tx_idx}");
     }
 
     println!();
@@ -277,7 +263,7 @@ fn main() -> ParseResult<()> {
     Ok(())
 }
 
-fn try_first_dat_entry<'a>(bytes: &'a [u8]) -> ParseResult<Option<&'a [u8]>> {
+fn try_first_dat_entry(bytes: &[u8]) -> ParseResult<Option<&[u8]>> {
     for magic in [MAINNET_MAGIC, TESTNET_MAGIC, SIGNET_MAGIC] {
         let mut it = BlkFileIter::new(bytes, magic);
         if let Some(first) = it.next_block()? {

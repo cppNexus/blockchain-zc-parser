@@ -342,6 +342,9 @@ mod tests {
         let mut cursor = Cursor::new(&raw);
         let header = BlockHeader::parse(&mut cursor).unwrap();
         // prev_block bytes should point into the original buffer
+        // SAFETY: `raw_ptr` comes from `raw`, which is an 80-byte array.
+        // Adding 4 is within bounds and points to the start of `prev_block`
+        // inside the same header buffer.
         assert_eq!(header.prev_block.as_bytes().as_ptr(), unsafe {
             raw_ptr.add(4)
         });
