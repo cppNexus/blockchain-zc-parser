@@ -2,6 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/blockchain-zc-parser.svg)](https://crates.io/crates/blockchain-zc-parser)
 [![Docs.rs](https://docs.rs/blockchain-zc-parser/badge.svg)](https://docs.rs/blockchain-zc-parser)
+[![CI](https://github.com/cppNexus/blockchain-zc-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/cppNexus/blockchain-zc-parser/actions/workflows/ci.yml)
 [![Apache-2.0](https://img.shields.io/badge/license-20Apache--2.0-blue.svg)](#license)
 
 A **zero-copy**, allocation-free parser for Bitcoin blockchain binary data written in Rust.

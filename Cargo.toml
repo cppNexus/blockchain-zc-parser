@@ -1,15 +1,26 @@
 [package]
 name = "blockchain-zc-parser"
 version = "0.1.0"
-edition = "2024"
-rust-version = "1.88"
-authors = ["Your Name <you@example.com>"]
+edition = "2021"
+rust-version = "1.74"
 description = "Zero-copy, allocation-free parser for Bitcoin/blockchain binary data"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/yourname/blockchain-zc-parser"
+repository = "https://github.com/cppNexus/blockchain-zc-parser"
+homepage = "https://github.com/cppNexus/blockchain-zc-parser"
+documentation = "https://docs.rs/blockchain-zc-parser"
 keywords = ["blockchain", "bitcoin", "parser", "zero-copy", "no-alloc"]
 categories = ["parser-implementations", "cryptography::cryptocurrencies"]
 readme = "README.md"
+include = [
+  "src/**",
+  "examples/**",
+  "benches/**",
+  "tests/**",
+  "Cargo.toml",
+  "README.md",
+  "LICENSE-APACHE",
+  "LICENSE-MIT",
+]
 
 [dependencies]
 sha2 = { version = "0.10", default-features = false }
@@ -36,6 +47,10 @@ version = "1"
 optional = true
 default-features = false
 features = ["derive"]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
 
 [profile.release]
 lto = "fat"

@@ -215,10 +215,10 @@ fn main() -> ParseResult<()> {
         saw_first_input_in_tx = false;
     }
 
-    if let Some(only) = opts.only_tx
-        && only >= tx_idx
-    {
-        eprintln!("requested --tx {only}, but block has only {tx_idx} transactions");
+    if let Some(only) = opts.only_tx {
+        if only >= tx_idx {
+            eprintln!("requested --tx {only}, but block has only {tx_idx} transactions");
+        }
     }
 
     println!("\n--- Parse Stats ---");
