@@ -37,7 +37,7 @@ jobs:
         run: cargo test --all-targets --all-features
 
   clippy:
-    name: clippy (msrv 1.83, deny warnings)
+    name: clippy (deny warnings)
     runs-on: ubuntu-latest
 
     steps:
@@ -46,7 +46,7 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: 1.83.0
+          toolchain: 1.88.0
           components: clippy
 
       - name: Cache cargo
