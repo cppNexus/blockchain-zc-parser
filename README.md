@@ -93,7 +93,7 @@ cargo run --example parse_block -- --tx 100 genesis.bin
 
 There are **two different binary formats** you may encounter:
 
-### 1️⃣ Raw block (`.bin`, RPC, mempool API)
+### Raw block (`.bin`, RPC, mempool API)
 
 This is the pure Bitcoin block payload:
 
@@ -121,7 +121,7 @@ let (header, iter) = BlockTxIter::new(raw_block_bytes)?;
 
 ---
 
-### 2️⃣ Bitcoin Core `blkNNNNN.dat`
+### Bitcoin Core `blkNNNNN.dat`
 
 Files in your local Bitcoin Core data directory:
 
@@ -149,7 +149,7 @@ while let Some(raw_block) = it.next_block()? {
 
 ---
 
-### 🔍 Important
+### Important
 
 If you pass a `blkNNNNN.dat` file directly to `BlockTxIter::new`, parsing will fail
 because the file contains magic bytes and size prefixes.
@@ -286,7 +286,7 @@ With `default-features = false`:
 
 ## Minimum supported Rust version (MSRV)
 
-**Rust 1.74+** (edition 2021). The crate uses only stable Rust features.
+**Rust 1.83+** (edition 2021). The crate uses only stable Rust features.
 
 ---
 
