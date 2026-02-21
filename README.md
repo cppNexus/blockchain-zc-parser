@@ -2,6 +2,8 @@
 
 [![Crates.io](https://img.shields.io/crates/v/blockchain-zc-parser)](https://crates.io/crates/blockchain-zc-parser)
 [![Docs.rs](https://img.shields.io/docsrs/blockchain-zc-parser)](https://docs.rs/blockchain-zc-parser)
+[![MSRV](https://img.shields.io/badge/MSRV-1.88-success)](https://crates.io/crates/blockchain-zc-parser)
+[![Downloads](https://img.shields.io/crates/d/blockchain-zc-parser.svg)](https://crates.io/crates/blockchain-zc-parser)
 [![CI](https://github.com/cppNexus/blockchain-zc-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/cppNexus/blockchain-zc-parser/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](#license)
 
